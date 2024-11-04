@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Activity Wheel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    #wheelContainer {
+      text-align: center;
+    }
+    #wheel {
+      width: 200px;
+      height: 200px;
+      border: 10px solid #333;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #ffd700;
+      color: #333;
+      transition: transform 3s ease-out;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    #spinButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="wheelContainer">
+  <div id="wheel">Spin Me!</div>
+  <button id="spinButton">Spin the Wheel</button>
+  <div id="result"></div>
+</div>
+
+<script>
+  const activities = [
+    "Meditate for 3 minutes",
+    "Walk for 10 minutes",
+    "Do 18 pushups in a row"
+  ];
+
+  const wheel = document.getElementById("wheel");
+  const result = document.getElementById("result");
+  const spinButton = document.getElementById("spinButton");
+
+  spinButton.addEventListener("click", () => {
+    // Clear previous result
+    result.innerHTML = "";
+
+    // Generate random rotation
+    const randomIndex = Math.floor(Math.random() * activities.length);
+    const randomRotation = 3600 + randomIndex * 120; // Adds extra rotations for effect
+
+    // Apply rotation and show the selected activity after the spin
+    wheel.style.transform = `rotate(${randomRotation}deg)`;
+    
+    setTimeout(() => {
+      result.innerHTML = `Your activity: ${activities[randomIndex]}`;
+    }, 3000); // Display result after the spin ends
+  });
+</script>
+
+</body>
+</html>
