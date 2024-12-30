@@ -1,83 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Activity Wheel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
-    #wheelContainer {
-      text-align: center;
-    }
-    #wheel {
-      width: 200px;
-      height: 200px;
-      border: 10px solid #333;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #ffd700;
-      color: #333;
-      transition: transform 3s ease-out;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-    }
-    #spinButton {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin the Wheel</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #333;
+            background: conic-gradient(
+                #FF5733 0% 11.1%,
+                #FFBD33 11.1% 22.2%,
+                #75FF33 22.2% 33.3%,
+                #33FFF3 33.3% 44.4%,
+                #335CFF 44.4% 55.5%,
+                #8C33FF 55.5% 66.6%,
+                #FF33A8 66.6% 77.7%,
+                #FF3333 77.7% 88.8%,
+                #33FF57 88.8% 100%
+            );
+            transform: rotate(0deg);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 60px;
+            background-color: #333;
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel"></div>
+    </div>
+    <button class="button" onclick="spinWheel()">Spin the Wheel</button>
 
-<div id="wheelContainer">
-  <div id="wheel">Spin Me!</div>
-  <button id="spinButton">Spin the Wheel</button>
-  <div id="result"></div>
-</div>
+    <script>
+        const segments = [
+            "Wellness: Sleep",
+            "Wellness: Eating",
+            "Wellness: Exercise",
+            "Wisdom: Appreciation",
+            "Wisdom: Psychology",
+            "Wisdom: Entrepreneurship",
+            "Wealth: Career",
+            "Wealth: Projects",
+            "Wealth: Investing"
+        ];
 
-<script>
-  const activities = [
-    "Meditate for 3 minutes",
-    "Walk for 10 minutes",
-    "Do 18 pushups in a row"
-  ];
+        let currentAngle = 0;
 
-  const wheel = document.getElementById("wheel");
-  const result = document.getElementById("result");
-  const spinButton = document.getElementById("spinButton");
+        function spinWheel() {
+            const randomAngle = Math.floor(Math.random() * 360 + 720); // Ensures at least two full spins
+            const wheel = document.getElementById("wheel");
+            currentAngle += randomAngle;
+            wheel.style.transform = `rotate(${currentAngle}deg)`;
 
-  spinButton.addEventListener("click", () => {
-    // Clear previous result
-    result.innerHTML = "";
-
-    // Generate random rotation
-    const randomIndex = Math.floor(Math.random() * activities.length);
-    const randomRotation = 3600 + randomIndex * 120; // Adds extra rotations for effect
-
-    // Apply rotation and show the selected activity after the spin
-    wheel.style.transform = `rotate(${randomRotation}deg)`;
-    
-    setTimeout(() => {
-      result.innerHTML = `Your activity: ${activities[randomIndex]}`;
-    }, 3000); // Display result after the spin ends
-  });
-</script>
-
+            setTimeout(() => {
+                const normalizedAngle = (currentAngle % 360 + 360) % 360;
+                const segmentIndex = Math.floor((segments.length - (normalizedAngle / 360 * segments.length)) % segments.length);
+                alert(`You got: ${segments[segmentIndex]}`);
+            }, 4000); // Matches the CSS transition duration
+        }
+    </script>
 </body>
 </html>
